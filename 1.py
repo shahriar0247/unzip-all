@@ -56,6 +56,7 @@ while True:
                 else:
                     filename = file[:-4]
                     filecheck(filename, filesize)
+            os.remove(filename +".zip")    
                 
 
 
