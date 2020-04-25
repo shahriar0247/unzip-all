@@ -5,7 +5,7 @@ import psutil
 
 
 
-def get_size(start_path = '.'):
+def get_size(start_path):
     total_size = 0
     for dirpath, dirnames, filenames in os.walk(start_path):
         for f in filenames:
@@ -13,7 +13,6 @@ def get_size(start_path = '.'):
             # skip if it is symbolic link
             if not os.path.islink(fp):
                 total_size += os.path.getsize(fp)
-
     return total_size
 
 def filenamechange(filename):
@@ -29,8 +28,9 @@ def filecheck(filename, filesize):
     if filename in os.listdir():
 
         if get_size(filename) == filesize:
-            pass
+            print("Same file exists")
         else:
+            print(filesize)
             filecheck(filenamechange(filename), filesize)
     else:
        
@@ -47,13 +47,15 @@ while True:
         if file[-4:] == ".zip":   
             print(" \\\ Unzipping "+ file)
             with zipfile.ZipFile(file, 'r') as zip_ref:
+                filesize = 0
                 for a in zip_ref.infolist():
-                    if a.file_size > diskspace:
+                    filesize = filesize + a.file_size
+                if filesize > diskspace:
                         print(" --- Not enough space for "+ file)
-                        print(" --- Available " + str(diskspace) + " bytes. Required "+ str(a.file_size) + " bytes")
-                    else:
-                        filename = file[:-4]
-                        filecheck(filename, a.file_size)
+                        print(" --- Available " + str(diskspace) + " bytes. Required "+ str(filesize) + " bytes")
+                else:
+                    filename = file[:-4]
+                    filecheck(filename, filesize)
                 
 
 
