@@ -17,11 +17,12 @@ def get_size(start_path = '.'):
     return total_size
 
 def filenamechange(filename):
+    print(" /// Creating new file name for "+ filename)
     try:
         filename = filename[:-1] + str(int(filename[-1:]) + 1)
     except:
         filename = filename + " 2"
-
+    print(" /// New file name is "+filename)
     return filename
 
 def filecheck(filename, filesize):
@@ -38,15 +39,18 @@ def filecheck(filename, filesize):
 
 while True:
     hdd = psutil.disk_usage('/')
-    diskspace = hdd.used
+    diskspace = hdd.free
+    print(" --- Disk space available: "+ str(diskspace) +" bytes")
     time.sleep(1)
     files = os.listdir()
     for file in files:
         if file[-4:] == ".zip":   
+            print(" \\\ Unzipping "+ file)
             with zipfile.ZipFile(file, 'r') as zip_ref:
                 for a in zip_ref.infolist():
                     if a.file_size > diskspace:
-                        pass
+                        print(" --- Not enough space for "+ file)
+                        print(" --- Available " + str(diskspace) + " bytes. Required "+ str(a.file_size) + " bytes")
                     else:
                         filename = file[:-4]
                         filecheck(filename, a.file_size)
