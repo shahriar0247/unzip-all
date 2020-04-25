@@ -2,6 +2,7 @@ import zipfile
 import os
 import time
 import psutil
+import shutil
 
 
 
@@ -28,13 +29,15 @@ def filecheck(filename, filesize):
     if filename in os.listdir():
 
         if get_size(filename) == filesize:
+           
             print("Same file exists")
         else:
             print(filesize)
             filecheck(filenamechange(filename), filesize)
     else:
-       
         zip_ref.extractall(filename)
+       
+        
 
 
 while True:
@@ -56,8 +59,8 @@ while True:
                 else:
                     filename = file[:-4]
                     filecheck(filename, filesize)
+            
             os.remove(filename +".zip")    
-                
 
 
 
